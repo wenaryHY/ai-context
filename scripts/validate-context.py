@@ -19,6 +19,8 @@ REQUIRED_FILES = [
     "docs/verification.md",
     "docs/versioning.md",
     "docs/release.md",
+    "docs/release-zh.md",
+    "docs/faq.md",
     "docs/contracts/README.md",
     "adapters/cursor.md",
     "adapters/claude.md",

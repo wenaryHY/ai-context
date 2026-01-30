@@ -23,3 +23,8 @@
 ## 常见问题
 - CI 失败时先跑 `python3 scripts/validate-context.py`。
 - 分层不同步时跑 `python3 scripts/sync-core.py`。
+
+## 相关链接
+- 人类使用说明：`user-guide.md`
+- 发布流程（中文）：`release-zh.md`
+- 常见问题：`faq.md`

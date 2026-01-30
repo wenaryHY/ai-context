@@ -13,6 +13,8 @@ This repo provides layered, reusable context rules and templates for AI-assisted
 ## Human Guides
 - `docs/user-guide.md`
 - `docs/usage-zh.md`
+- `docs/release-zh.md`
+- `docs/faq.md`
 
 ## Verify
 ```bash
