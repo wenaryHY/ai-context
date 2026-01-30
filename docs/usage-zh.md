@@ -28,3 +28,7 @@
 - 人类使用说明：`user-guide.md`
 - 发布流程（中文）：`release-zh.md`
 - 常见问题：`faq.md`
+
+## Windows 使用提示
+- 验证：`scripts\\verify.cmd` 或 `scripts\\verify.ps1`
+- 发布：`scripts\\release.cmd X.Y.Z` 或 `scripts\\release.ps1 X.Y.Z`

@@ -22,6 +22,17 @@ If `core/core-full.md` changed, regenerate tiers:
 python3 scripts/sync-core.py
 ```
 
+## Windows Verification
+Use PowerShell or CMD:
+
+```powershell
+scripts\\verify.ps1
+```
+
+```bat
+scripts\\verify.cmd
+```
+
 ## CI Verification
 Pull requests run:
 - `scripts/validate-context.py`

@@ -9,7 +9,8 @@
    - `python3 scripts/sync-core.py --check`
    - `python3 scripts/validate-context.py`
 4. 打标签并推送：
-   - `./scripts/release.sh X.Y.Z`
+   - Linux/macOS：`./scripts/release.sh X.Y.Z`
+   - Windows：`scripts\\release.cmd X.Y.Z` 或 `scripts\\release.ps1 X.Y.Z`
 
 推送标签后会触发 GitHub Actions 自动创建 Release。
 

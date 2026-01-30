@@ -9,7 +9,8 @@
    - `python3 scripts/sync-core.py --check`
    - `python3 scripts/validate-context.py`
 4. Tag and push:
-   - `./scripts/release.sh X.Y.Z`
+   - Linux/macOS: `./scripts/release.sh X.Y.Z`
+   - Windows: `scripts\\release.cmd X.Y.Z` or `scripts\\release.ps1 X.Y.Z`
 
 Pushing the tag triggers the GitHub Actions release workflow.
 

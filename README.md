@@ -22,6 +22,12 @@ python3 scripts/sync-core.py --check
 python3 scripts/validate-context.py
 ```
 
+## Windows
+```bat
+scripts\\verify.cmd
+scripts\\release.cmd X.Y.Z
+```
+
 ## Release
 ```bash
 ./scripts/release.sh X.Y.Z
