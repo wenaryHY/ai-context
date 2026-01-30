@@ -1,0 +1,18 @@
+name: validate-context
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Validate required files
+        run: python scripts/validate-context.py
+      - name: Verify core tiers in sync
+        run: python scripts/sync-core.py --check
