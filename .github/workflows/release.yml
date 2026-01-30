@@ -1,0 +1,31 @@
+name: release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Validate context
+        run: python scripts/validate-context.py
+      - name: Verify core tiers in sync
+        run: python scripts/sync-core.py --check
+      - name: Prepare release metadata
+        id: meta
+        run: |
+          echo "timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")" >> "$GITHUB_OUTPUT"
+          echo "version=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          body: |
+            Version: v${{ steps.meta.outputs.version }}
+            ReleasedAt: ${{ steps.meta.outputs.timestamp }}
+            Changelog: templates/contracts/CHANGELOG.md

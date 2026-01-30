@@ -6,6 +6,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 REQUIRED_FILES = [
+    "README.md",
     "core/core-full.md",
     "core/core.md",
     "core/core-min.md",
@@ -13,10 +14,15 @@ REQUIRED_FILES = [
     "backend.md",
     "collaboration-protocol.md",
     "docs/usage.md",
+    "docs/verification.md",
+    "docs/versioning.md",
+    "docs/release.md",
     "docs/contracts/README.md",
     "adapters/cursor.md",
     "adapters/claude.md",
     "adapters/plain.md",
+    "scripts/release.sh",
+    "scripts/verify.sh",
     "templates/contracts/CHANGELOG.md",
     "templates/contracts/openapi/openapi.yaml",
     "templates/contracts/proto/service/v1/service.proto",

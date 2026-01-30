@@ -17,6 +17,11 @@ Always start with the smallest set that still covers the task:
 - Avoid combining `core-full.md` with multiple module docs.
 - Prefer contract templates over long prose when discussing APIs.
 
+## Verification and Release
+- Usage and verification: `verification.md`
+- Versioning strategy: `versioning.md`
+- Release process: `release.md`
+
 ## Recommended Links
 - Frontend rules: `../frontend.md`
 - Backend rules: `../backend.md`
