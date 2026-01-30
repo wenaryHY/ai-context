@@ -10,6 +10,10 @@ This repo provides layered, reusable context rules and templates for AI-assisted
 2. Load one module doc: `frontend.md` or `backend.md`.
 3. Use `docs/usage.md` for guidance and `examples/prompts/` for templates.
 
+## Human Guides
+- `docs/user-guide.md`
+- `docs/usage-zh.md`
+
 ## Verify
 ```bash
 python3 scripts/sync-core.py --check

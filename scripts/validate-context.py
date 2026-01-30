@@ -14,6 +14,8 @@ REQUIRED_FILES = [
     "backend.md",
     "collaboration-protocol.md",
     "docs/usage.md",
+    "docs/user-guide.md",
+    "docs/usage-zh.md",
     "docs/verification.md",
     "docs/versioning.md",
     "docs/release.md",
