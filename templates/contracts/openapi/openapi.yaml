@@ -1,0 +1,138 @@
+openapi: 3.0.3
+info:
+  title: Example Service API
+  version: 1.0.0
+  description: Contract-first OpenAPI template. Replace placeholders before use.
+servers:
+  - url: https://api.example.com
+paths:
+  /v1/items:
+    get:
+      summary: List items
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: size
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ItemsResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: object
+          additionalProperties: true
+      required:
+        - code
+        - message
+    ErrorResponse:
+      type: object
+      properties:
+        data:
+          nullable: true
+        error:
+          $ref: "#/components/schemas/Error"
+        traceId:
+          type: string
+      required:
+        - error
+        - traceId
+    PageMeta:
+      type: object
+      properties:
+        page:
+          type: integer
+        size:
+          type: integer
+        total:
+          type: integer
+        totalPages:
+          type: integer
+      required:
+        - page
+        - size
+        - total
+        - totalPages
+    Item:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - name
+        - createdAt
+    ItemsData:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/Item"
+        page:
+          $ref: "#/components/schemas/PageMeta"
+      required:
+        - items
+        - page
+    ItemsResponse:
+      type: object
+      properties:
+        data:
+          $ref: "#/components/schemas/ItemsData"
+        error:
+          nullable: true
+        traceId:
+          type: string
+      required:
+        - data
+        - traceId

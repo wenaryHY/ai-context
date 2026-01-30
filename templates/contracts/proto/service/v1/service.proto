@@ -1,0 +1,68 @@
+syntax = "proto3";
+
+package example.service.v1;
+
+option go_package = "example/service/v1;servicev1";
+option java_package = "com.example.service.v1";
+option java_multiple_files = true;
+
+message Error {
+  string code = 1;
+  string message = 2;
+  map<string, string> details = 3;
+}
+
+message ErrorResponse {
+  Error error = 1;
+  string trace_id = 2;
+}
+
+message PageMeta {
+  int32 page = 1;
+  int32 size = 2;
+  int64 total = 3;
+  int32 total_pages = 4;
+}
+
+message Item {
+  string id = 1;
+  string name = 2;
+  int64 created_at = 3;
+}
+
+message ListItemsRequest {
+  int32 page = 1;
+  int32 size = 2;
+  string query = 3;
+}
+
+message ListItemsResponse {
+  repeated Item items = 1;
+  PageMeta page = 2;
+  string trace_id = 3;
+}
+
+message CreateItemByName {
+  string name = 1;
+}
+
+message CreateItemByImport {
+  string source = 1;
+}
+
+message CreateItemRequest {
+  oneof payload {
+    CreateItemByName by_name = 1;
+    CreateItemByImport by_import = 2;
+  }
+}
+
+message CreateItemResponse {
+  Item item = 1;
+  string trace_id = 2;
+}
+
+service ItemService {
+  rpc ListItems(ListItemsRequest) returns (ListItemsResponse);
+  rpc CreateItem(CreateItemRequest) returns (CreateItemResponse);
+}
