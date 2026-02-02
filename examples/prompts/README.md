@@ -7,3 +7,5 @@ Use these templates as starting points. Keep prompts small and load only the nee
 - `api-change.md`
 - `refactor.md`
 - `code-review.md`
+- `task-brief.md`
+- `analyze-edit-verify.md`

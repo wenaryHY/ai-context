@@ -31,6 +31,12 @@ Build full-stack systems that are evolvable, testable, observable, and secure un
 - Use a single SCSS global entry for layout/themes; scoped only for local tweaks.
 - Build tool choice per project (Rsbuild or Vite) with isolated entry/output.
 
+## Scalability and Consistency (Standard)
+- Define data scale and QPS targets; document the limits.
+- Default to server-side filtering; avoid full scans by default.
+- Pick one counter strategy: optimistic lock, atomic update, or event-driven.
+- Isolate blocking IO to boundedElastic or async jobs.
+
 ## Modules (link)
 - Frontend rules: `../frontend.md`
 - Backend rules: `../backend.md`

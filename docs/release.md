@@ -25,3 +25,23 @@ The timestamp must come from the system command:
 ```bash
 date -u +"%Y-%m-%dT%H:%M:%SZ"
 ```
+
+## Architecture Notes (Reference)
+### Root causes
+- Limited query/filter support leads to full scans and in-memory paging.
+- Delivery-first choices push business logic into handlers.
+- Blocking IO (CSV/files) inside reactive paths reduces throughput.
+- Missing scale/QPS budgets hide risks until late.
+
+### Solutions by scale
+- Lists/stats: small data can scan; medium needs server filters or index tables; large uses pre-aggregation or read models.
+- Counters: low concurrency allow read-modify-write; medium use optimistic lock; high use atomic or event-driven updates.
+- Import/export: small files use boundedElastic; large files use async jobs + streaming.
+- Endpoint hygiene: move shared logic to use-cases/assemblers.
+
+### Design-time prevention
+- Define data scale/QPS targets and document limits.
+- Default to server-side filtering; avoid full scans by default.
+- Pick one counter strategy upfront.
+- Isolate blocking IO to dedicated threads or async jobs.
+- Minimum tests: auth, idempotency, state transitions, import/export.

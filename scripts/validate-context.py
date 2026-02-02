@@ -1,18 +1,33 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+import shutil
+import subprocess
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+TASK_BRIEF_REL = "docs/task-briefs/latest.md"
+TASK_BRIEF_ARCHIVE_REL = "docs/task-briefs/archive"
+TASK_BRIEF_README_REL = "docs/task-briefs/README.md"
+MODULE_MAP_REL = "docs/module-map.md"
+MODULE_MAP_ZH_REL = "docs/module-map-zh.md"
 
 REQUIRED_FILES = [
+    # Root files
     "README.md",
+    "LICENSE",
+    "CHANGELOG.md",
+    "CONTRIBUTING.md",
+    ".editorconfig",
+    # Core context tiers
     "core/core-full.md",
     "core/core.md",
     "core/core-min.md",
+    # Module docs
     "frontend.md",
     "backend.md",
     "collaboration-protocol.md",
+    # Documentation
     "docs/usage.md",
     "docs/user-guide.md",
     "docs/usage-zh.md",
@@ -21,16 +36,32 @@ REQUIRED_FILES = [
     "docs/release.md",
     "docs/release-zh.md",
     "docs/faq.md",
+    TASK_BRIEF_REL,
+    TASK_BRIEF_README_REL,
+    MODULE_MAP_REL,
+    MODULE_MAP_ZH_REL,
     "docs/contracts/README.md",
+    # Adapters
     "adapters/cursor.md",
     "adapters/claude.md",
     "adapters/plain.md",
+    "adapters/chatgpt.md",
+    "adapters/copilot.md",
+    "adapters/gemini.md",
+    # Architecture review
+    "backend-architecture-review/issues.md",
+    "backend-architecture-review/solutions.md",
+    # Scripts
     "scripts/release.sh",
     "scripts/verify.sh",
+    "scripts/archive-task-brief.py",
+    "scripts/start-task-brief.py",
+    "scripts/generate-module-map.py",
     "scripts/release.ps1",
     "scripts/verify.ps1",
     "scripts/release.cmd",
     "scripts/verify.cmd",
+    # Templates
     "templates/contracts/CHANGELOG.md",
     "templates/contracts/openapi/openapi.yaml",
     "templates/contracts/proto/service/v1/service.proto",
@@ -43,11 +74,87 @@ TIER_MARKERS = [
     "<!-- tier:standard:start -->",
     "<!-- tier:standard:end -->",
 ]
+TASK_BRIEF_FIELDS = [
+    "In-scope",
+    "Out-of-scope",
+    "Do-not-touch",
+    "Dependencies",
+    "Behavior",
+    "Non-functional",
+    "Tests/verification",
+    "Key files",
+    "Risks/assumptions",
+]
+TASK_BRIEF_PLACEHOLDERS = [
+    "[what must change]",
+    "[what must not change]",
+    "[files/modules to avoid]",
+    "[modules/services/contracts impacted]",
+    "[expected behavior]",
+    "[perf/security/latency targets]",
+    "[tests or checks to run]",
+    "[entrypoints, key files]",
+    "[assumptions to validate]",
+]
 
 
 def fail(message: str) -> int:
     print(message)
     return 1
+
+
+def validate_task_brief(content: str) -> list[str]:
+    errors: list[str] = []
+    if not content.strip():
+        errors.append("Task brief is empty.")
+        return errors
+    for placeholder in TASK_BRIEF_PLACEHOLDERS:
+        if placeholder in content:
+            errors.append(f"Replace placeholder: {placeholder}")
+    lines = content.splitlines()
+    for field in TASK_BRIEF_FIELDS:
+        prefix = f"- {field}:"
+        match = next((line for line in lines if line.lstrip().startswith(prefix)), None)
+        if not match:
+            errors.append(f"Missing required field: {field}")
+            continue
+        value = match.split(":", 1)[1].strip()
+        if not value or value.startswith("["):
+            errors.append(f"Field {field} must be filled.")
+    return errors
+
+
+def archive_has_latest(content: str) -> bool:
+    archive_dir = ROOT / TASK_BRIEF_ARCHIVE_REL
+    if not archive_dir.exists() or not archive_dir.is_dir():
+        return False
+    for path in archive_dir.rglob("*.md"):
+        try:
+            if path.read_text(encoding="utf-8") == content:
+                return True
+        except OSError:
+            continue
+    return False
+
+
+def git_changed_files() -> set[str]:
+    def run(args: list[str]) -> list[str]:
+        result = subprocess.run(
+            ["git", *args],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        if result.returncode != 0:
+            raise RuntimeError(result.stderr.strip() or "git command failed")
+        return [line.strip() for line in result.stdout.splitlines() if line.strip()]
+
+    changed: set[str] = set()
+    changed.update(run(["diff", "--name-only"]))
+    changed.update(run(["diff", "--name-only", "--cached"]))
+    changed.update(run(["ls-files", "--others", "--exclude-standard"]))
+    return changed
 
 
 def main() -> int:
@@ -66,6 +173,32 @@ def main() -> int:
         for marker in TIER_MARKERS:
             if marker in content:
                 return fail(f"Tier marker found in {name}: {marker}")
+
+    task_brief_path = ROOT / TASK_BRIEF_REL
+    task_brief_content = task_brief_path.read_text(encoding="utf-8")
+    errors = validate_task_brief(task_brief_content)
+    if errors:
+        details = "\n".join(f"- {e}" for e in errors)
+        return fail(f"Task brief validation failed:\n{details}")
+
+    if not (ROOT / ".git").exists() or shutil.which("git") is None:
+        return fail("Task brief enforcement requires a git checkout with git available.")
+
+    try:
+        changed_files = git_changed_files()
+    except RuntimeError as exc:
+        return fail(f"Task brief enforcement failed: {exc}")
+
+    if changed_files and TASK_BRIEF_REL not in changed_files:
+        return fail(
+            "Task brief enforcement: update docs/task-briefs/latest.md when making any changes."
+        )
+
+    if not archive_has_latest(task_brief_content):
+        return fail(
+            "Task brief archive missing: run scripts/archive-task-brief.py "
+            "to archive docs/task-briefs/latest.md."
+        )
 
     return 0
 
