@@ -64,6 +64,11 @@ logs/
 .env.local
 *.local
 
+# AI Context Toolkit - Snapshots and logs
+.ai-context/
+.ai-context/snapshots/
+.ai-context/logs/
+
 # Editor backups
 *~
 \#*\#

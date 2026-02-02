@@ -3,6 +3,56 @@
 ## 适用对象
 本说明面向维护和使用本仓库的人类用户。
 
+## 懒人化工作流（推荐）
+
+### 一键初始化
+```bash
+# 自动检测环境并选择最优 AI Agent
+python3 scripts/init.py
+
+# 交互式选择 Agent
+python3 scripts/init.py --interactive
+
+# 指定 Agent
+python3 scripts/init.py --agent aider
+```
+
+### 启动任务
+```bash
+# 基本用法（自动创建快照）
+python3 scripts/start-task.py "实现用户登录功能"
+
+# 指定任务类型
+python3 scripts/start-task.py "修复登录 bug" --type fix
+
+# 指定文件
+python3 scripts/start-task.py "重构 API" --files src/api.py src/service.py
+```
+
+### 完成任务
+```bash
+# 验证并归档
+python3 scripts/finish-task.py
+
+# 带自动提交
+python3 scripts/finish-task.py --commit
+```
+
+### 回滚（如需撤销 AI 修改）
+```bash
+# 列出所有快照
+python3 scripts/rollback.py --list
+
+# 回滚到最新快照
+python3 scripts/rollback.py --latest
+
+# 查看差异后决定
+python3 scripts/rollback.py --diff <snapshot_id>
+
+# 选择性回滚特定文件
+python3 scripts/rollback.py --id <snapshot_id> --files src/api.py
+```
+
 ## 日常使用流程
 1. 选择最小可用的核心层级。
 2. 只加载一个模块文档（`frontend.md` 或 `backend.md`）。
@@ -54,6 +104,22 @@
 - 代码检索/索引：Sourcegraph/Cody、ctags+rg、SCIP/LSIF。
 - RAG 框架：LlamaIndex、LangChain、Haystack。
 - 任务型 Agent：Aider、Cline、OpenHands/SWE-agent。
+
+### 支持的 AI Agent
+本工具包为 8 个 AI 编码助手提供 Python 适配器：
+
+| Agent | CLI 命令 | API Key 环境变量 |
+|-------|----------|-----------------|
+| Aider | `aider` | `OPENAI_API_KEY` |
+| Claude CLI | `claude` | `ANTHROPIC_API_KEY` |
+| Cursor | `cursor` | - |
+| GitHub Copilot | `gh copilot` | `GITHUB_TOKEN` |
+| OpenAI CLI | `openai` | `OPENAI_API_KEY` |
+| Gemini CLI | `gemini` / `gcloud` | `GOOGLE_API_KEY` |
+| Ollama | `ollama` | - (本地模型) |
+| Continue.dev | `continue` | - |
+
+使用 `python3 scripts/core/env_detector.py --agents-only` 查看可用的 Agent。
 
 ## 架构注意事项（参考）
 ### 常见根因

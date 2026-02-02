@@ -41,26 +41,52 @@ REQUIRED_FILES = [
     MODULE_MAP_REL,
     MODULE_MAP_ZH_REL,
     "docs/contracts/README.md",
-    # Adapters
+    # Adapters - Documentation
     "adapters/cursor.md",
     "adapters/claude.md",
     "adapters/plain.md",
     "adapters/chatgpt.md",
     "adapters/copilot.md",
     "adapters/gemini.md",
+    "adapters/README.md",
+    # Adapters - Python (懒人化脚本)
+    "adapters/__init__.py",
+    "adapters/base_adapter.py",
+    "adapters/aider_adapter.py",
+    "adapters/claude_cli_adapter.py",
+    "adapters/cursor_api_adapter.py",
+    "adapters/copilot_cli_adapter.py",
+    "adapters/openai_cli_adapter.py",
+    "adapters/gemini_cli_adapter.py",
+    "adapters/ollama_adapter.py",
+    "adapters/continue_adapter.py",
     # Architecture review
     "backend-architecture-review/issues.md",
     "backend-architecture-review/solutions.md",
-    # Scripts
+    # Configuration
+    "config/agents.yaml",
+    "config/environments.yaml",
+    # Scripts - Release/Verify
     "scripts/release.sh",
     "scripts/verify.sh",
-    "scripts/archive-task-brief.py",
-    "scripts/start-task-brief.py",
-    "scripts/generate-module-map.py",
     "scripts/release.ps1",
     "scripts/verify.ps1",
     "scripts/release.cmd",
     "scripts/verify.cmd",
+    # Scripts - Task management
+    "scripts/archive-task-brief.py",
+    "scripts/start-task-brief.py",
+    "scripts/generate-module-map.py",
+    # Scripts - Lazy automation (懒人化脚本)
+    "scripts/init.py",
+    "scripts/start-task.py",
+    "scripts/finish-task.py",
+    "scripts/rollback.py",
+    # Scripts - Core modules
+    "scripts/core/__init__.py",
+    "scripts/core/rollback_manager.py",
+    "scripts/core/env_detector.py",
+    "scripts/core/agent_registry.py",
     # Templates
     "templates/contracts/CHANGELOG.md",
     "templates/contracts/openapi/openapi.yaml",

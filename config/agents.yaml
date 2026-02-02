@@ -1,0 +1,76 @@
+# AI Context Toolkit - Agent Configuration
+# =========================================
+#
+# This file configures AI agents and their preferences.
+#
+# Usage:
+#   - Set preferred_agent to your default AI agent
+#   - Configure individual agents with model preferences
+#   - Enable/disable agents as needed
+
+preferences:
+  # Default agent to use when not specified
+  preferred_agent: aider
+  
+  # Automatically create snapshots before tasks
+  auto_snapshot: true
+  
+  # Automatically commit changes after tasks
+  auto_commit: false
+  
+  # Keep this many snapshots before cleanup
+  snapshot_keep_count: 10
+
+# Agent-specific configurations
+agents:
+  aider:
+    enabled: true
+    model: gpt-4
+    auto_commits: false
+    # Additional flags for aider CLI
+    extra_args: []
+  
+  claude-cli:
+    enabled: true
+    model: claude-3.5-sonnet
+    max_tokens: 4096
+  
+  cursor:
+    enabled: true
+    # Cursor manages its own model selection
+  
+  copilot-cli:
+    enabled: true
+    shell: bash
+  
+  openai-cli:
+    enabled: true
+    model: gpt-4
+    max_tokens: 4096
+  
+  gemini-cli:
+    enabled: true
+    model: gemini-1.5-pro
+  
+  ollama:
+    enabled: true
+    model: codellama
+    # Pull model automatically if not available
+    auto_pull: false
+  
+  continue:
+    enabled: true
+    provider: openai
+    model: gpt-4
+
+# Priority order for auto-selection (higher = more preferred)
+# Only used when no agent is explicitly specified
+priority:
+  - aider
+  - claude-cli
+  - cursor
+  - copilot-cli
+  - openai-cli
+  - gemini-cli
+  - ollama
+  - continue

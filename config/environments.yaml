@@ -1,0 +1,76 @@
+# AI Context Toolkit - Environment Configuration
+# ==============================================
+#
+# This file configures environment detection and validation.
+
+# Snapshot configuration
+snapshot:
+  # Mode: auto, git_stash, file_backup, hybrid
+  mode: auto
+  
+  # Number of snapshots to keep
+  keep_count: 10
+  
+  # Directories to exclude from snapshots
+  exclude:
+    - node_modules
+    - __pycache__
+    - .git
+    - .venv
+    - venv
+    - build
+    - dist
+    - target
+
+# Validation settings
+validation:
+  # Require task brief before making changes
+  require_task_brief: true
+  
+  # Require archiving task brief after completion
+  require_archive: true
+  
+  # Run linting before completing task
+  run_lint: false
+  
+  # Run tests before completing task
+  run_tests: false
+
+# Project detection settings
+detection:
+  # Detect frontend frameworks
+  frontend: true
+  
+  # Detect backend frameworks
+  backend: true
+  
+  # Detect AI tools/agents
+  ai_tools: true
+  
+  # Detect package managers
+  package_managers: true
+
+# IDE integration
+ide:
+  # Generate .cursorrules for Cursor IDE
+  generate_cursorrules: true
+  
+  # Generate CLAUDE.md for Claude Code
+  generate_claude_context: true
+  
+  # Generate .github/copilot-instructions.md
+  generate_copilot_instructions: false
+
+# Environment variables to check
+env_vars:
+  openai:
+    - OPENAI_API_KEY
+    - OPENAI_ORG_ID
+  anthropic:
+    - ANTHROPIC_API_KEY
+  google:
+    - GOOGLE_API_KEY
+    - GOOGLE_APPLICATION_CREDENTIALS
+  github:
+    - GITHUB_TOKEN
+    - GH_TOKEN

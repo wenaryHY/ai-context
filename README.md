@@ -76,6 +76,36 @@ ls examples/prompts/
 
 ## 🛠️ Scripts & Tools
 
+### 懒人化工作流（推荐）
+
+```bash
+# 1. 一键初始化项目
+python3 scripts/init.py
+
+# 2. 启动新任务（自动创建快照）
+python3 scripts/start-task.py "实现用户登录功能"
+
+# 3. 完成任务
+python3 scripts/finish-task.py --commit
+
+# 4. 如需回滚
+python3 scripts/rollback.py --list
+python3 scripts/rollback.py --latest
+```
+
+### 环境检测
+
+```bash
+# 查看完整环境信息
+python3 scripts/init.py --json
+
+# 仅查看可用 AI Agent
+python3 scripts/core/env_detector.py --agents-only
+
+# 交互式选择 Agent
+python3 scripts/init.py --interactive
+```
+
 ### 验证
 
 ```bash
@@ -94,6 +124,25 @@ python3 scripts/archive-task-brief.py
 
 # 创建新简报（自动归档旧简报）
 python3 scripts/start-task-brief.py --archive-current
+
+# 智能任务启动（推荐）
+python3 scripts/start-task.py "任务描述" --type feature
+```
+
+### 回滚管理
+
+```bash
+# 列出所有快照
+python3 scripts/rollback.py --list
+
+# 回滚到最新快照
+python3 scripts/rollback.py --latest
+
+# 查看快照差异
+python3 scripts/rollback.py --diff <snapshot_id>
+
+# 选择性回滚特定文件
+python3 scripts/rollback.py --id <snapshot_id> --files src/api.py
 ```
 
 ### 模块地图生成
@@ -127,9 +176,12 @@ ai-context/
 ├── backend.md               # 后端模块规则
 ├── collaboration-protocol.md # 多 AI 协作协议
 ├── adapters/                # AI 平台适配器
-│   ├── cursor.md
-│   ├── claude.md
-│   └── plain.md
+│   ├── *.md                 # 文档适配器（Cursor/Claude/Copilot/Gemini）
+│   ├── base_adapter.py      # Python 适配器基类
+│   └── *_adapter.py         # Python 适配器（8 个 AI Agent）
+├── config/                  # 配置文件
+│   ├── agents.yaml          # Agent 配置和优先级
+│   └── environments.yaml    # 环境和验证设置
 ├── docs/                    # 文档
 │   ├── contracts/           # 契约指南
 │   ├── task-briefs/         # 任务简报
@@ -141,6 +193,15 @@ ai-context/
 │       ├── openapi/
 │       └── proto/
 └── scripts/                 # 自动化脚本
+    ├── core/                # 核心模块
+    │   ├── rollback_manager.py  # 快照和回滚
+    │   ├── env_detector.py      # 环境检测
+    │   └── agent_registry.py    # Agent 注册表
+    ├── init.py              # 一键初始化
+    ├── start-task.py        # 智能任务启动
+    ├── finish-task.py       # 任务完成
+    ├── rollback.py          # 回滚管理 CLI
+    └── ...                  # 其他工具脚本
 ```
 
 ## 🎯 Large Project Tips
@@ -162,6 +223,19 @@ ai-context/
 - 代码检索：Sourcegraph/Cody, ctags+rg, SCIP/LSIF
 - RAG 框架：LlamaIndex, LangChain, Haystack
 - 任务 Agent：Aider, Cline, OpenHands/SWE-agent
+
+### 支持的 AI Agent
+
+| Agent | CLI 命令 | 说明 |
+|-------|----------|------|
+| Aider | `aider` | 终端 AI 编程助手 |
+| Claude CLI | `claude` | Anthropic Claude |
+| Cursor | `cursor` | AI-first 代码编辑器 |
+| GitHub Copilot | `gh copilot` | GitHub AI 助手 |
+| OpenAI CLI | `openai` | OpenAI API CLI |
+| Gemini CLI | `gemini` / `gcloud` | Google AI |
+| Ollama | `ollama` | 本地 LLM |
+| Continue.dev | `continue` | 开源 AI 编码助手 |
 
 ## 🤝 Contributing
 
